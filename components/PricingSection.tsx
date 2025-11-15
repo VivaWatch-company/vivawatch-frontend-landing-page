@@ -5,9 +5,9 @@ const PricingSection = () => {
   const plans = [
     {
       name: "Essencial",
-      price: "R$ 0",
-      period: "Beta gratuito",
-      features: [
+      price: "R$ 8,98",
+      period: "Beta",
+      planBenefits: [
         "Dashboard básico",
         "Notificações básicas",
         "1 dispositivo",
@@ -17,9 +17,9 @@ const PricingSection = () => {
     },
     {
       name: "Avançado",
-      price: "R$ 29",
+      price: "R$ 28,79",
       period: "por mês",
-      features: [
+      planBenefits: [
         "Dashboard completo",
         "Dados em tempo real",
         "Até 3 dispositivos",
@@ -30,9 +30,9 @@ const PricingSection = () => {
     },
     {
       name: "Profissional",
-      price: "R$ 59",
+      price: "R$ 58,97",
       period: "por mês",
-      features: [
+      planBenefits: [
         "Multi-usuário",
         "Dispositivos ilimitados",
         "Relatórios avançados",
@@ -81,7 +81,7 @@ const PricingSection = () => {
                 <span className="text-muted-foreground ml-2">/{plan.period}</span>
               </div>
               <ul className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
+                {plan.planBenefits.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-muted-foreground">{feature}</span>
@@ -89,9 +89,9 @@ const PricingSection = () => {
                 ))}
               </ul>
               <Button
-                className={`w-full ${
+                className={`w-full cursor-pointer ${
                   plan.highlighted
-                    ? "bg-primary hover:bg-primary/90"
+                    ? "bg-primary hover:bg-primary/95"
                     : "bg-secondary hover:bg-secondary/90 text-foreground"
                 }`}
                 size="lg"

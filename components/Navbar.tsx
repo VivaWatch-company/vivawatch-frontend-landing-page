@@ -1,11 +1,13 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Watch } from "lucide-react";
+import { useAuthModalStore } from "@/app/(public)/stores/AuthModal.store";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { isAuthModalOpen, setIsAuthModalOpen } = useAuthModalStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +22,10 @@ const Navbar = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const handleOpenModal = () => {
+    setIsAuthModalOpen(!isAuthModalOpen);
   };
 
   return (
@@ -43,42 +49,43 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-8">
             <button
               onClick={() => scrollToSection("hero")}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               Início
             </button>
             <button
               onClick={() => scrollToSection("about")}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               Sobre
             </button>
             <button
               onClick={() => scrollToSection("features")}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               Funcionalidades
             </button>
             <button
               onClick={() => scrollToSection("pricing")}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               Planos
             </button>
             <button
               onClick={() => scrollToSection("contact")}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               Contato
             </button>
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm">
+            <Button
+              size="sm"
+              className="bg-primary hover:bg-primary/90"
+              onClick={handleOpenModal}
+            >
               Login
-            </Button>
-            <Button size="sm" className="bg-primary hover:bg-primary/90">
-              Criar Conta
             </Button>
           </div>
         </div>

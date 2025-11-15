@@ -30,7 +30,8 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-4 pt-4">
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 cursor-pointer"
+                onClick={() => scrollToSection("pricing")}
               >
                 Começar agora
                 <ArrowRight className="w-5 h-5" />
@@ -39,7 +40,7 @@ const HeroSection = () => {
                 size="lg"
                 variant="outline"
                 onClick={() => scrollToSection("how-it-works")}
-                className="gap-2"
+                className="gap-2 cursor-pointer"
               >
                 <PlayCircle className="w-5 h-5" />
                 Ver como funciona

@@ -1,13 +1,7 @@
+import { scrollToSection } from "@/utils/helpers";
 import { Watch, Mail } from "lucide-react";
 
 const Footer = () => {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <footer id="contact" className="bg-foreground text-background py-12">
       <div className="container mx-auto px-4">
