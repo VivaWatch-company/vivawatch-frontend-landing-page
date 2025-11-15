@@ -9,6 +9,7 @@ import PricingSection from "@/components/PricingSection";
 import { useAuthModalStore } from "./stores/AuthModal.store";
 import AuthModal from "./(components)/AuthModal";
 import Timeline from "@/components/TimeLine";
+import CustomerReviews from "@/components/CustomerReviews";
 
 export default function Home() {
   const { isAuthModalOpen } = useAuthModalStore();
@@ -21,6 +22,7 @@ export default function Home() {
       <FeaturesSection />
       <HowItWorksSection />
       <Timeline/>
+      <CustomerReviews/>
       <PricingSection />
       <FAQSection />
     </div>
