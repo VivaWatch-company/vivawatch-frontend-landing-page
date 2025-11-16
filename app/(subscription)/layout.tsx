@@ -1,20 +1,19 @@
 "use client";
-import Footer from "@/components/FooterSection";
-import "../globals.css";
-import Navbar from "@/components/Navbar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+import Footer from "@/components/FooterSection";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "../globals.css";
+
+export default function Layout(props: {
   children: React.ReactNode;
-}>) {
+}) {
+  const { children } = props;
   const queryClient = new QueryClient();
+
   return (
     <html>
       <QueryClientProvider client={queryClient}>
         <body className="min-h-screen">
-          <Navbar />
           {children}
           <Footer />
         </body>

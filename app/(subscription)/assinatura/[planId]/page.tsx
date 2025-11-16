@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { RegisterInput } from "../(components)/serializers/register-schema";
@@ -15,15 +15,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { useQuery } from "@tanstack/react-query";
+import { TPlan } from "@/commons/types/TPlan";
+import { PlanService } from "@/services/plan.service";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Eye, EyeClosed } from "lucide-react";
+import { useState } from "react";
+import { UserService } from "@/services/user.service";
 
 export default function SubscriptionPage() {
-  const { planId } = useParams();
+  const { planId } = useParams<{ planId: string }>();
   const router = useRouter();
+  const [seePassword, setSeePassword] = useState<boolean>(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [plan, setPlan] = useState<any>(null);
-  const [loadingPlan, setLoadingPlan] = useState(true);
+  const { isPending, error, data } = useQuery<TPlan>({
+    queryKey: ["fetPlan"],
+    queryFn: async () => {
+      const planService = new PlanService();
+      return await planService.getOne(planId);
+    },
+  });
 
   const {
     register,
@@ -33,13 +48,11 @@ export default function SubscriptionPage() {
 
   const onSubmit = async (data: RegisterInput) => {
     try {
+      const userService = new UserService();
       // cria o usuário
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      const res = await userService.create(data);
 
-      if (!res.ok) {
+      if (!res.success) {
         console.error("Erro ao criar usuário");
         return;
       }
@@ -49,11 +62,12 @@ export default function SubscriptionPage() {
       console.error(error);
     }
   };
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 bg-muted/30">
       <Card className="w-full max-w-md shadow-md rounded-2xl">
         <CardHeader>
-          {loadingPlan ? (
+          {isPending ? (
             <>
               <Skeleton className="h-6 w-40" />
               <Skeleton className="h-4 w-60 mt-2" />
@@ -64,8 +78,8 @@ export default function SubscriptionPage() {
                 Criar conta para assinar o plano
               </CardTitle>
               <CardDescription>
-                {plan
-                  ? `Você está assinando o plano: ${plan.name}`
+                {data
+                  ? `Você está assinando o plano: ${data.name}`
                   : "Plano não encontrado"}
               </CardDescription>
             </>
@@ -76,7 +90,7 @@ export default function SubscriptionPage() {
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <Label>Nome completo</Label>
-              <Input placeholder="Gabriel Godoi" {...register("name")} />
+              <Input placeholder="seu nome" {...register("name")} />
               {errors.name && (
                 <p className="text-sm text-red-600 mt-1">
                   {errors.name.message}
@@ -100,14 +114,38 @@ export default function SubscriptionPage() {
 
             <div>
               <Label>Senha</Label>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                {...register("password")}
-              />
+              <InputGroup id="password">
+                <InputGroupInput
+                  placeholder="••••••••"
+                  type={seePassword ? "text" : "password"}
+                  {...register("password", { required: true })}
+                  required
+                />
+                <InputGroupAddon align="inline-end">
+                  {!seePassword ? (
+                    <Eye onClick={() => setSeePassword(true)} />
+                  ) : (
+                    <EyeClosed onClick={() => setSeePassword(false)} />
+                  )}
+                </InputGroupAddon>
+              </InputGroup>
               {errors.password && (
                 <p className="text-sm text-red-600 mt-1">
                   {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label>Cpf</Label>
+              <Input
+                placeholder="XXX.XXX.XXX-XX"
+                {...register("document", { required: true })}
+                required
+              />
+              {errors.document && (
+                <p className="text-sm text-red-600 mt-1">
+                  {errors.document.message}
                 </p>
               )}
             </div>
