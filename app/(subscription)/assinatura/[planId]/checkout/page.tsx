@@ -9,61 +9,57 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-// Ícones opcionais
 import { CreditCard, QrCode } from "lucide-react";
+import { PlanService } from "@/services/plan.service";
 import Image from "next/image";
+import { HeroImage } from "@/app/(common)/assets/images";
 
 export default function CheckoutPage() {
-  const { planId } = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { planId } = useParams<{ planId: string }>();
   const [plan, setPlan] = useState<any>(null);
 
   const [paymentMethod, setPaymentMethod] = useState("pix");
 
-  // Buscar o plano
   useEffect(() => {
     async function fetchPlan() {
-      const res = await fetch(`/api/plans/${planId}`);
-      const data = await res.json();
-      setPlan(data);
+      const plainService = new PlanService();
+      const res = await plainService.getOne(planId);
+      setPlan(res);
     }
-
     fetchPlan();
   }, [planId]);
 
   return (
-    <div className="min-h-screen w-full flex items-start justify-center bg-gradient-to-br from-purple-100 to-purple-200 p-10">
+    <div className="min-h-screen w-full flex items-start justify-center bg-background p-10">
       <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-10">
-
-        {/* Lado esquerdo: Informações do plano */}
+        {/* Esquerda */}
         <div>
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold text-foreground">
             Finalize sua assinatura
           </h1>
+
           <p className="text-muted-foreground mt-1">
             Você está quase garantindo acesso ao seu plano.
           </p>
 
-          <Card className="p-4 mt-6 flex items-center gap-4 shadow-md bg-white/70 backdrop-blur">
-            {/* <Image
-              src="https://via.placeholder.com/80"
-              className="w-20 h-20 rounded-xl object-cover"
-              alt="Plano"
-            /> */}
+          <Card className="p-4 mt-6 flex items-center gap-4">
+            <Image src={HeroImage} alt={""} />
             <div>
-              <h2 className="font-semibold text-lg">
+              <h2 className="font-semibold text-lg text-foreground">
                 {plan?.name || "Plano selecionado"}
               </h2>
-              <p className="text-purple-600 font-bold text-xl">
+              <p className="font-bold text-xl text-primary">
                 {plan?.price ? `R$ ${plan.price}` : "R$ 0,00"}
               </p>
             </div>
           </Card>
         </div>
 
-        {/* Lado direito: Pagamento */}
-        <Card className="p-6 shadow-md bg-white/80 backdrop-blur-md">
-          <h2 className="font-semibold text-xl mb-4">Forma de Pagamento</h2>
+        {/* Direita */}
+        <Card className="p-6">
+          <h2 className="font-semibold text-xl mb-4 text-foreground">
+            Forma de Pagamento
+          </h2>
 
           <RadioGroup
             defaultValue="pix"
@@ -71,15 +67,19 @@ export default function CheckoutPage() {
             className="space-y-4"
           >
             {/* PIX */}
-            <div className="border rounded-xl p-4">
+            <div className="border border-border rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="pix" id="pix" />
-                  <Label htmlFor="pix" className="cursor-pointer font-semibold flex items-center gap-2">
+                  <Label
+                    htmlFor="pix"
+                    className="cursor-pointer font-semibold flex items-center gap-2"
+                  >
                     <QrCode className="h-5 w-5" /> Pagar com PIX
                   </Label>
                 </div>
-                <span className="text-purple-600 font-bold">
+
+                <span className="text-primary font-bold">
                   {plan?.price ? `R$ ${plan.price}` : "R$ 0,00"}
                 </span>
               </div>
@@ -89,21 +89,24 @@ export default function CheckoutPage() {
               </p>
             </div>
 
-            {/* Cartão */}
-            <div className="border rounded-xl p-4">
+            {/* CARTÃO */}
+            <div className="border border-border rounded-xl p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="card" id="card" />
-                  <Label htmlFor="card" className="cursor-pointer font-semibold flex items-center gap-2">
+                  <Label
+                    htmlFor="card"
+                    className="cursor-pointer font-semibold flex items-center gap-2"
+                  >
                     <CreditCard className="h-5 w-5" /> Cartão de Crédito
                   </Label>
                 </div>
-                <span className="text-purple-600 font-bold">
+
+                <span className="font-bold text-primary">
                   {plan?.price ? `R$ ${plan.price}` : "R$ 0,00"}
                 </span>
               </div>
 
-              {/* Form do cartão */}
               {paymentMethod === "card" && (
                 <div className="space-y-4 mt-3">
                   <div>
@@ -136,9 +139,7 @@ export default function CheckoutPage() {
             </div>
           </RadioGroup>
 
-          <Button
-            className="w-full mt-6 py-6 text-lg font-semibold bg-gradient-to-r from-purple-500 to-pink-500"
-          >
+          <Button className="w-full mt-6 py-6 text-lg font-semibold">
             Confirmar Assinatura
           </Button>
 
