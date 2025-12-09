@@ -15,6 +15,8 @@ import {
 } from "@tanstack/react-query";
 import { PlanService } from "@/services/plan.service";
 import { TPlan } from "@/commons/types/TPlan";
+import Timeline from "@/components/TimeLine";
+import CustomerReviews from "@/components/CustomerReviews";
 
 export default function Home() {
   const { isAuthModalOpen } = useAuthModalStore();
@@ -39,6 +41,8 @@ export default function Home() {
       <AboutSection />
       <FeaturesSection />
       <HowItWorksSection />
+      <Timeline/>
+      <CustomerReviews/>
       <QueryClientProvider client={queryClient}>
         {!isPending && <PricingSection plans={data} />}
       </QueryClientProvider>
